@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from rag import retrieve_context
 from prompt import SYSTEM_PROMPT
 from memory import add_to_memory, format_memory, clear_memory
+from rate_limiter import is_rate_limited, record_request
 
 # ── Load environment variables ──
 load_dotenv()
@@ -88,6 +89,10 @@ with st.sidebar:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "session_id" not in st.session_state:
+    import uuid
+    st.session_state.session_id = str(uuid.uuid4())
+
 # Display chat history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar="😈" if msg["role"] == "assistant" else "🤡"):
@@ -100,14 +105,30 @@ if user_input := st.chat_input("Say something... if you dare 🔥"):
     with st.chat_message("user", avatar="🤡"):
         st.markdown(user_input)
 
-    # Generate roast
-    with st.chat_message("assistant", avatar="😈"):
-        with st.spinner("Cooking up a roast... 🍳"):
-            try:
-                reply = chat(user_input)
-                st.markdown(reply)
-            except Exception as e:
-                reply = f"Even I broke trying to roast you. Error: {e}"
-                st.error(reply)
+    # Check rate limit before processing
+    session_id = st.session_state.session_id
+    limited, info = is_rate_limited(session_id)
 
-    st.session_state.messages.append({"role": "assistant", "content": reply})
+    if limited:
+        with st.chat_message("assistant", avatar="😈"):
+            reply = (
+                f"🚫 **Rate limit exceeded.** "
+                f"You've hit the max of {info['limit']} requests per {info['window']}s. "
+                f"Try again in **{info['retry_after']}s**. "
+                f"Even roast masters need a cooldown. 🔥"
+            )
+            st.warning(reply)
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+    else:
+        # Record the request and generate roast
+        record_request(session_id)
+        with st.chat_message("assistant", avatar="😈"):
+            with st.spinner("Cooking up a roast... 🍳"):
+                try:
+                    reply = chat(user_input)
+                    st.markdown(reply)
+                except Exception as e:
+                    reply = f"Even I broke trying to roast you. Error: {e}"
+                    st.error(reply)
+
+        st.session_state.messages.append({"role": "assistant", "content": reply})

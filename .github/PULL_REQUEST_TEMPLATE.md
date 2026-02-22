@@ -1,57 +1,77 @@
-## Team Number : Team
+Team Number : 153
+Description
 
-## Description
-<!-- Provide a brief description of what this PR does -->
+This PR implements rate limiting middleware to prevent excessive or spam usage of the roast bot API endpoints. The feature ensures fair usage, improves backend stability, and protects the application from potential abuse or denial-of-service scenarios.
 
+Related Issue
 
-## Related Issue
-<!-- Link to the issue this PR addresses -->
-Closes #(issue number)
+Closes #44
 
-## Type of Change
-<!-- Please check the relevant option(s) -->
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Performance improvement
-- [ ] Style/UI improvement
+Type of Change
 
-## Changes Made
-<!-- List the specific changes you made -->
-- 
-- 
-- 
+ Bug fix (non-breaking change which fixes an issue)
 
-## Screenshots (if applicable)
-<!-- Add before/after screenshots for UI changes -->
+ New feature (non-breaking change which adds functionality)
 
-**Before:**
+ Breaking change (fix or feature that would cause existing functionality to not work as expected)
 
+ Documentation update
 
-**After:**
+ Code refactoring
 
+ Performance improvement
 
-## Testing
-<!-- Describe the tests you ran to verify your changes -->
-- [ ] Tested on Desktop (Chrome/Firefox/Safari)
-- [ ] Tested on Mobile (iOS/Android)
-- [ ] Tested responsive design (different screen sizes)
-- [ ] No console errors or warnings
-- [ ] Code builds successfully (`npm run build`)
+ Style/UI improvement
 
-## Checklist
-<!-- Mark completed items with [x] -->
-- [ ] My code follows the project's code style guidelines
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code where necessary
-- [ ] My changes generate no new warnings
-- [ ] I have tested my changes thoroughly
-- [ ] All TypeScript types are properly defined
-- [ ] Tailwind CSS classes are used appropriately (no inline styles)
-- [ ] Component is responsive across different screen sizes
-- [ ] I have read and followed the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines
+Changes Made
 
-## Additional Notes
-<!-- Any additional information, concerns, or context -->
+Added rate limiting middleware to API endpoints
+
+Configured request limits using environment variables
+
+Implemented proper HTTP 429 (Too Many Requests) response handling
+
+Added basic test cases to validate rate limiting behavior
+
+Updated README with configuration instructions
+
+Screenshots (if applicable)
+
+Before:
+No rate limiting — unlimited requests allowed.
+
+After:
+Returns HTTP 429 response when request limit is exceeded.
+
+Testing
+
+ Tested on Desktop (Chrome/Firefox/Safari)
+
+ Tested on Mobile (iOS/Android)
+
+ Tested responsive design (different screen sizes)
+
+ No console errors or warnings
+
+ Code builds successfully (npm run build)
+
+Checklist
+
+ My code follows the project's code style guidelines
+
+ I have performed a self-review of my code
+
+ I have commented my code where necessary
+
+ My changes generate no new warnings
+
+ I have tested my changes thoroughly
+
+ All TypeScript types are properly defined
+
+ Tailwind CSS classes are used appropriately (no inline styles)
+
+ Component is responsive across different screen sizes
+
+ I have read and followed the CONTRIBUTING.md
+ guidelines
